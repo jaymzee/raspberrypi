@@ -7,8 +7,11 @@ class Magnet extends React.Component {
   handleClick = () => {
     const url = this.state.isMagnetOn ? '/leds/red/0' : 'leds/red/1';
     fetch(url, { method: 'PUT' })
-      .then(response => response.json())
-      .then(result => this.setState({ isMagnetOn: result.active }));
+      .then(response => response.status === 200 ?
+              response.json() :
+              Promise.reject("http error " + response.status))
+      .then(result => this.setState({ isMagnetOn: result.active }))
+      .catch(error => console.log("cannot reach server: " + error));
   }
 
   render() {

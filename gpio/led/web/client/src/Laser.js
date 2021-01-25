@@ -9,8 +9,11 @@ class Laser extends React.Component {
   laserButtonClicked = () => {
     const url = this.state.isLaserOn ? '/leds/blue/0' : 'leds/blue/1';
     fetch(url, { method: 'PUT' })
-      .then(response => response.json())
-      .then(result => this.setState({ isLaserOn: result.active }));
+      .then(response => response.status === 200 ?
+              response.json() :
+              Promise.reject("http error " + response.status))
+      .then(result => this.setState({ isLaserOn: result.active }))
+      .catch(error => console.log("cannot reach server: " + error));
   }
 
   render() {
