@@ -32,4 +32,4 @@ def set_led(name):
 
 @app.route('/')
 def index():
-    return 'led server'
+    return 'gpio server'
