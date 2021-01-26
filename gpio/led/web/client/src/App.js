@@ -1,20 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
-import VacuumPump from './Vacuum';
-import Magnet from './Magnet';
-import Laser from './Laser';
+import GPIO from './GPIO';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <VacuumPump /> &nbsp;
-        <Magnet /> &nbsp;
-        <Laser /> <br />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+        <GPIO name="vacuum pump" url="/leds/green" /> &nbsp;
+        <GPIO name="magnet" url="/leds/red" /> &nbsp;
+        <GPIO name="laser" url="/leds/blue" /> <br />
+        <GPIO name="coffee maker" url="/leds/yellow" /> <br />
         <a
           className="App-link"
           href="https://reactjs.org"

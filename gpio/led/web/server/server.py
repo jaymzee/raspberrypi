@@ -1,34 +1,34 @@
 import gpiozero as gpio
-from flask import Flask, jsonify, abort
+from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 leds = {
     'blue': gpio.LED(6, active_high=False),
     'red':  gpio.LED(13, active_high=False),
-    'green': gpio.LED(19, active_high=False)
+    'green': gpio.LED(19, active_high=False),
+    'yellow': gpio.LED(26, active_high=False)
 }
 
-@app.route('/leds')
+@app.route('/leds/')
 def get_leds():
-    return jsonify({ 'leds': list(leds.keys()) })
+    return jsonify({'leds': list(leds.keys())})
 
 @app.route('/leds/<string:name>')
 def get_led(name):
     if name not in leds:
         abort(404)
-    resp = jsonify({'active': leds[name].value != 0})
-    resp.headers.add('Access-Control-Allow-Origin', '*')
-    return resp
+    return jsonify({'active': leds[name].value != 0})
 
-@app.route('/leds/<string:name>/<int:value>', methods=['PUT'])
-def set_led(name, value):
+@app.route('/leds/<string:name>', methods=['PUT'])
+def set_led(name):
     if name not in leds:
         abort(404)
     led = leds[name]
-    led.value = value
-    resp = jsonify({'active': led.value != 0})
-    resp.headers.add('Access-Control-Allow-Origin', '*')
-    return resp
+    if request.json['active']:
+        led.value = 1
+    else:
+        led.value = 0
+    return jsonify({'active': led.value != 0})
 
 @app.route('/')
 def index():
