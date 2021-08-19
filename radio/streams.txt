@@ -1,0 +1,2 @@
+http://wfmu.org/wfmu_mp3.pls
+http://wfmu.org/wfmu_aac.pls

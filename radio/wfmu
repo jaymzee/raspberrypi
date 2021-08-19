@@ -1,0 +1,2 @@
+#!/bin/sh
+mplayer -playlist http://wfmu.org/wfmu_mp3.pls
