@@ -2,8 +2,9 @@ import sys
 import math
 import pygame
 from mcpi import minecraft
+from mcpi import block
 
-size = (1024, 768)
+size = (256, 256)
 width, height = size
 fps = 1
 
@@ -25,16 +26,32 @@ def main():
     clock = pygame.time.Clock()
     pygame.mouse.set_visible(0)
 
+    mc.postToChat('map addon loaded')
     while True:
-        x, y, z = mc.player.getPos()
-        xx = 200 + int(x)
-        yy = 200 + int(z)
+        x, y, z = mc.player.getTilePos()
+        xx = 128 + int(x)
+        yy = 128 + int(z)
         surf.set_at((xx, yy), green)
-        print(x, y, z, xx, yy)
+        print(x, y, z)
         pygame.display.flip()
         clock.tick(fps)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYUP:
+                if event.key == ord('a'):
+                    mc.setBlock(x, y, z, block.STONE)
+                elif event.key == ord('b'):
+                    mc.setBlocks(x-1, y, z-1, x+1, y+1, z+1, block.STONE)
+                elif event.key == ord('s'):
+                    for i in range(0, 5):
+                        mc.setBlocks(x-1, y, z+i, x+1, y+i, z+i, block.STONE)
+                    mc.postToChat('stone stairs added')
+                elif event.key == ord('t'):
+                    mc.setBlocks(x-1, y, z-1, x+1, y+10, z+1, block.STONE)
+                    mc.postToChat('stone tower added')
+                else:
+                    print('keypress', event.key)
+            elif event.type == pygame.QUIT:
+                mc.postToChat('unloading map')
                 pygame.quit()
                 sys.exit()
 
